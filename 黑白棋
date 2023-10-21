@@ -1,0 +1,70 @@
+#include <stdio.h>
+#define SIZE 8
+
+void Valid_Move(int chess[SIZE][SIZE] ,int i, int j, int color) //判斷是否可以下棋函式
+{
+        int coordinate[8][2]; //儲存可下棋的位置
+        int count=0; //coordinate陣列的註標值變數
+        int dx[]={-1, -1, -1, 0, 0, 1, 1, 1}, dy[]={-1, 0, 1, -1, 1, -1, 0, 1}; //對手棋的8個方位(從左上到右下)
+        int look_x=0, look_y=0; //dx 和 dy 陣列的註標值變數
+        coordinate[0][0]=8; //預設值，如未被覆蓋表示沒有可用的下棋位置
+        
+        for (int x=i-1; x<=i+1; x++) //以(i,j)為中心從左上到右下判斷一個3X3的二維陣列中有哪些是對手棋（x表橫）
+        {
+            for (int y=j-1; y<=j+1; y++) //（y表列）
+            {
+                if (x==i && y==j) continue; //跳過(i,j)
+
+                else if (chess[x][y]!=color && chess[x][y]!=0) //如果chess[x][y]是對手棋
+                {
+                    int X=x+dx[look_x], Y=y+dy[look_y]; //根據chess[x][y]與(i,j)的相對位置給定相對可放棋的位置
+                    
+                    while (X>=0 && X<SIZE && Y>=0 && Y<SIZE) //判斷放棋位置(chess[X][Y])是否超出棋盤範圍
+                    {
+                        if (chess[X][Y]==0) //如果是空位
+                        {
+                            coordinate[count][0]=X, coordinate[count][1]=Y; //把此座標存入coordinate陣列中
+                            count+=1; //coordinate陣列的註標值變數+1
+                            break; //因為已放置棋，所以跳出迴圈，繼續判斷下一個
+                        }
+                        else if (chess[X][Y]!=color) //如果此座標依然是對手棋
+                            X+=dx[look_x], Y+=dy[look_y]; //則根據chess[x][y]與(i,j)的相對位置在往外推移一格
+                        
+                        else break; //如果此座標是自己棋則跳出迴圈，繼續判斷下一個
+                    }
+                }
+                if (x!=i || y!=j) look_x+=1, look_y+=1; //把dx和dy陣列的註標值變數的各+1，這樣才能對上從左上到右下判斷對手棋與(i,j)的的相對位置可放棋的位置(除了到(i,j)以外)
+            }
+        }
+        if (coordinate[0][0]==8) printf("not existed"); //如果沒有可下棋的位置
+
+        else //有則輸出coordinate陣列
+            for (int out=0; out<count; out++)
+                printf("(%d, %d)", coordinate[out][0], coordinate[out][1]);
+        
+}
+
+int main()
+{
+    int chess[SIZE][SIZE]={
+    {2, 1, 1, 1, 1, 1, 1, 0},
+    {2, 1, 2, 1, 1, 2, 1, 0},
+    {2, 2, 1, 1, 1, 2, 1, 1},
+    {2, 1, 2, 1, 1, 2, 1, 0},
+    {2, 1, 2, 2, 2, 2, 1, 0},
+    {2, 2, 2, 2, 2, 2, 1, 0},
+    {2, 2, 2, 1, 1, 2, 0, 0},
+    {0, 1, 0, 0, 0, 0, 0, 0}
+    };
+
+    int i=3, j=3;
+    printf("(%d, %d) is %d\n",i ,j, chess[i][j]);
+
+    if (chess[i][j]==0) printf("no available movement"); //如果(i,j)是空位
+    else //不是的話
+    {
+        printf("The 8 possible legal positions of coordinates (%d, %d): ", i, j);
+        Valid_Move(chess, i, j, chess[i][j]); //呼叫函Valid_Move式判斷
+    }
+    return 0;
+}
