@@ -1,0 +1,28 @@
+<string.h>
+char *strcat(char *dest, const char *src);
+功能：在字串dest之後連接上src
+範例：
+
+char *strncat(char *dest, const char *src, size_t n);
+功能：從src截取n個字元連接在字串dest之後，返回dest字串
+範例：
+
+int strcmp(const char *, const char *);
+功能：基於字典順序比較兩個字串
+範例：
+
+int strncmp(const char *, const char *, size_t n);
+功能：基於字典順序比較兩個字串，最多比較n個位元組
+範例：
+
+char *strcpy(char* str1, const char* str2);
+功能：將str2拷貝給str1
+範例：
+
+char *strncpy(char* str1, const char* str2, size_t n);
+功能：截取str2的n個字元拷貝給str1
+範例：
+
+size_t strlen(const char *);
+功能：返回一個字串的長度
+範例：
