@@ -1,0 +1,19 @@
+<stdio.h>
+#文件操作
+int remove(const char *filename);
+int rename(const char *old, const char *new);
+
+#格式化輸入輸出
+int scanf(const char * restrict format, ...);
+int sprintf(char * restrict s, const char * restrict format, ...);
+int printf(const char * restrict format, ...);
+
+#字符輸入輸出
+int getchar(void);
+int putchar(int c);
+
+#錯誤處理
+void clearerr(FILE *stream);
+int feof(FILE *stream);
+int ferror(FILE *stream);
+void perror(const char *s);
