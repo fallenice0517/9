@@ -1,0 +1,4 @@
+<stdlib.h>
+atof
+功能：把string轉換為double
+範例：
