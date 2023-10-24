@@ -1,0 +1,32 @@
+<math.h>
+int abs(int);
+功能：求整數的絕對值
+範例：
+
+double sqrt(double);
+功能：開根號
+範例：
+
+double pow(double, double);
+功能：計算X^y
+範例：
+
+double sin(double);
+功能：sin
+範例：
+
+double cos(double);
+功能：sin
+範例：
+
+double tan(double);
+功能：sin
+範例：
+
+double log(double);
+功能：自然對數(log)
+範例：
+
+double log10(double);
+功能：常用對數(log)
+範例：
