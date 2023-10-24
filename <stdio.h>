@@ -1,19 +1,48 @@
 <stdio.h>
 #文件操作
 int remove(const char *filename);
+功能：deletes the file or directory referred to by its string argument.
+範例：
+
 int rename(const char *old, const char *new);
+功能：causes the filename referred to by old_filename to be changed to new_filename.
+範例：
 
 #格式化輸入輸出
 int scanf(const char * restrict format, ...);
+功能：formatted text, under the control of the format format and any additional arguments.
+範例：
+
 int sprintf(char * restrict s, const char * restrict format, ...);
+功能：把格式文字轉成字串並傳到變數中儲存
+範例：
+
 int printf(const char * restrict format, ...);
+功能：輸出格式化字串
+範例：
 
 #字符輸入輸出
 int getchar(void);
+功能：輸入一個字符（unsigned char類型）
+範例：
+
 int putchar(int c);
+功能：used to write a character, of unsigned char type, to stdout.
+範例：
 
 #錯誤處理
 void clearerr(FILE *stream);
+功能：clears the end-of-file and error indicators for the given stream.
+範例：
+
 int feof(FILE *stream);
+功能：indicates whether the end-of-file flag is set for the given stream .
+範例：
+
 int ferror(FILE *stream);
+功能：tests for an error in reading from or writing to the given stream .
+範例：
+
 void perror(const char *s);
+功能：takes a string argument (s) that is typically used to provide additional information about the error.
+範例：
