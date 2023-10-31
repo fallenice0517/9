@@ -1,0 +1,100 @@
+#include <stdio.h>
+#define SIZE 8
+void Direction_Move(int chess[SIZE][SIZE] ,int i, int j, int d_x, int d_y)
+{
+    int count=2, X=i+d_x, Y=j+d_y;
+    while (X>=0 && X<SIZE && Y>=0 && Y<SIZE)
+    {
+        if (chess[X][Y]!=0 && chess[X][Y]!=chess[i][j])
+        {
+            X+=d_x, Y+=d_y;
+            if (chess[X][Y]==0)
+            {
+                printf("%d, available coordinate is (%d, %d), distance is %d.\n",chess[i][j],X,Y,count);
+                break;
+            }
+            else if (chess[X][Y]!=chess[i][j])
+                X+=d_x, Y+=d_y, count++;
+            else if ((chess[X][Y]==chess[i][j]) || ((X==0 || X==SIZE) && (Y==0 || Y==SIZE)))
+            {
+                printf("0 No available movement.\n");
+                break;
+            }
+        }
+        else
+        {
+            printf("0 No available movement.\n");
+            break;
+        }
+    }    
+}
+void All_Valid_Move(int chess[SIZE][SIZE], int color)
+{
+        int coordinate[64][2];
+        int count=0;       
+        coordinate[0][0]=8;
+        for (int i=0; i<SIZE; i++)
+        {
+            for (int j=0; j<SIZE; j++)
+            {
+                if (chess[i][j]==color)
+                {
+                    int dx[]={-1, -1, -1, 0, 0, 1, 1, 1}, dy[]={-1, 0, 1, -1, 1, -1, 0, 1};
+                    int look_x=0, look_y=0;
+                    for (int x=i-1; x<=i+1; x++)
+                    {
+                        for (int y=j-1; y<=j+1; y++)
+                        {
+                            if (x==i && y==j) continue;
+                            else if (chess[x][y]!=chess[i][j] && chess[x][y]!=0)
+                            {
+                                int X=x+dx[look_x], Y=y+dy[look_y];
+                                
+                                while (X>=0 && X<SIZE && Y>=0 && Y<SIZE) 
+                                {
+                                    if (chess[X][Y]==0)
+                                    {
+                                        coordinate[count][0]=X, coordinate[count][1]=Y, count+=1;
+                                        break;
+                                    }
+                                    else if (chess[X][Y]!=chess[i][j])
+                                        X+=dx[look_x], Y+=dy[look_y];
+                                    else break;
+                                }
+                            }
+                            if (x!=i || y!=j) look_x+=1, look_y+=1;
+                        }
+                    }
+                }
+            }
+        }
+        if (coordinate[0][0]==8) printf("not existed");
+        else
+            for (int out=0; out<count; out++)
+                printf("(%d, %d)", coordinate[out][0], coordinate[out][1]);    
+}
+int main()
+{
+    int chess[SIZE][SIZE]={
+    {0, 0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 2, 1, 0, 0, 0},
+    {0, 0, 0, 1, 2, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0, 0}
+    };
+
+    int i=3, j=3, d_x=0, d_y=1;
+    Direction_Move(chess, i, j, d_x, d_y);
+
+    printf("All available movements for white chess are: ");
+    All_Valid_Move(chess,2);
+    printf("\n");
+
+    printf("All available movements for black chess are: ");
+    All_Valid_Move(chess,1);
+    printf("\n");
+    return 0;
+}
