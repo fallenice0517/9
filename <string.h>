@@ -1,28 +1,659 @@
-<string.h>
-char *strcat(char *dest, const char *src);
-功能：在字串dest之後連接上src
-範例：
+#include <string.h>
 
-char *strncat(char *dest, const char *src, size_t n);
-功能：從src截取n個字元連接在字串dest之後，返回dest字串
-範例：
+函數名: stpcpy
+功  能: 拷貝一個字符串到另一個
+用  法: char *stpcpy(char *destin, char *source);
+程序例:
 
-int strcmp(const char *, const char *);
-功能：基於字典順序比較兩個字串
-範例：
+#include <stdio.h>
+#include <string.h>
 
-int strncmp(const char *, const char *, size_t n);
-功能：基於字典順序比較兩個字串，最多比較n個位元組
-範例：
+int main(void)
+{
+   char string[10];
+   char *str1 = "abcdefghi";
 
-char *strcpy(char* str1, const char* str2);
-功能：將str2拷貝給str1
-範例：
+   stpcpy(string, str1);
+   printf("%s\n", string);
+   return 0;
+}
+ 
+ 
+ 
 
-char *strncpy(char* str1, const char* str2, size_t n);
-功能：截取str2的n個字元拷貝給str1
-範例：
+函數名: strcat
+功  能: 字符串拼接函數
+用  法: char *strcat(char *destin, char *source);
+程序例:
 
-size_t strlen(const char *);
-功能：返回一個字串的長度
-範例：
+#include <string.h>
+#include <stdio.h>
+
+int main(void)
+{
+   char destination[25];
+   char *blank = " ", *c = "C++", *Borland = "Borland";
+
+   strcpy(destination, Borland);
+   strcat(destination, blank);
+   strcat(destination, c);
+
+   printf("%s\n", destination);
+   return 0;
+}
+ 
+ 
+ 
+
+函數名: strchr
+功  能: 在一個串中查找給定字符的第一個匹配之處\
+用  法: char *strchr(char *str, char c);
+程序例:
+
+#include <string.h>
+#include <stdio.h>
+
+int main(void)
+ {
+    char string[15];
+    char *ptr, c = 'r';
+
+    strcpy(string, "This is a string");
+    ptr = strchr(string, c);
+    if (ptr)
+       printf("The character %c is at position: %d\n", c, ptr-string);
+    else
+       printf("The character was not found\n");
+    return 0;
+ }
+ 
+ 
+ 
+
+函數名: strcmp
+功  能: 串比較
+用  法: int strcmp(char *str1, char *str2);
+看Asic碼，str1>str2，返回值 > 0；兩串相等，返回0
+程序例:
+
+#include <string.h>
+#include <stdio.h>
+
+int main(void)
+ {
+    char *buf1 = "aaa", *buf2 = "bbb", *buf3 = "ccc";
+    int ptr;
+
+    ptr = strcmp(buf2, buf1);
+    if (ptr > 0)
+       printf("buffer 2 is greater than buffer 1\n");
+    else
+       printf("buffer 2 is less than buffer 1\n");
+
+    ptr = strcmp(buf2, buf3);
+    if (ptr > 0)
+       printf("buffer 2 is greater than buffer 3\n");
+    else
+       printf("buffer 2 is less than buffer 3\n");
+
+    return 0;
+ }
+ 
+ 
+ 
+
+函數名: strncmpi
+功  能: 將一個串中的一部分與另一個串比較, 不管大小寫
+用  法: int strncmpi(char *str1, char *str2, unsigned maxlen);
+程序例:
+
+#include <string.h>
+#include <stdio.h>
+
+int main(void)
+{
+   char *buf1 = "BBB", *buf2 = "bbb";
+   int ptr;
+
+   ptr = strcmpi(buf2, buf1);
+
+   if (ptr > 0)
+      printf("buffer 2 is greater than buffer 1\n");
+
+   if (ptr < 0)
+      printf("buffer 2 is less than buffer 1\n");
+
+   if (ptr == 0)
+      printf("buffer 2 equals buffer 1\n");
+
+   return 0;
+}
+ 
+ 
+ 
+
+函數名: strcpy
+功  能: 串拷貝
+用  法: char *strcpy(char *str1, char *str2);
+程序例:
+
+#include <stdio.h>
+#include <string.h>
+
+int main(void)
+ {
+    char string[10];
+    char *str1 = "abcdefghi";
+
+    strcpy(string, str1);
+    printf("%s\n", string);
+    return 0;
+ }
+ 
+ 
+ 
+
+函數名: strcspn
+功  能: 在串中查找第一個給定字符集內容的段
+用  法: int strcspn(char *str1, char *str2);
+程序例:
+
+#include <stdio.h>
+#include <string.h>
+#include <alloc.h>
+
+int main(void)
+ {
+    char *string1 = "1234567890";
+    char *string2 = "747DC8";
+    int length;
+
+    length = strcspn(string1, string2);
+    printf("Character where strings intersect is at position %d\n", length);
+
+    return 0;
+ }
+ 
+ 
+ 
+
+函數名: strdup
+功  能: 將串拷貝到新建的位置處
+用  法: char *strdup(char *str);
+程序例:
+
+#include <stdio.h>
+#include <string.h>
+#include <alloc.h>
+
+int main(void)
+ {
+    char *dup_str, *string = "abcde";
+
+    dup_str = strdup(string);
+    printf("%s\n", dup_str);
+    free(dup_str);
+
+    return 0;
+ }
+ 
+ 
+ 
+
+函數名: stricmp
+功  能: 以大小寫不敏感方式比較兩個串
+用  法: int stricmp(char *str1, char *str2);
+程序例:
+
+#include <string.h>
+#include <stdio.h>
+
+int main(void)
+{
+   char *buf1 = "BBB", *buf2 = "bbb";
+   int ptr;
+
+   ptr = stricmp(buf2, buf1);
+
+   if (ptr > 0)
+      printf("buffer 2 is greater than buffer 1\n");
+
+   if (ptr < 0)
+      printf("buffer 2 is less than buffer 1\n");
+
+   if (ptr == 0)
+      printf("buffer 2 equals buffer 1\n");
+
+   return 0;
+}
+ 
+ 
+
+函數名: strerror
+功  能: 返回指向錯誤信息字符串的指針
+用  法: char *strerror(int errnum);
+程序例:
+
+#include <stdio.h>
+#include <errno.h>
+
+int main(void)
+{
+   char *buffer;
+   buffer = strerror(errno);
+   printf("Error: %s\n", buffer);
+   return 0;
+}
+ 
+ 
+ 
+
+函數名: strcmpi
+功  能: 將一個串與另一個比較, 不管大小寫
+用  法: int strcmpi(char *str1, char *str2);
+程序例:
+
+#include <string.h>
+#include <stdio.h>
+
+int main(void)
+{
+   char *buf1 = "BBB", *buf2 = "bbb";
+   int ptr;
+
+   ptr = strcmpi(buf2, buf1);
+
+   if (ptr > 0)
+      printf("buffer 2 is greater than buffer 1\n");
+
+   if (ptr < 0)
+      printf("buffer 2 is less than buffer 1\n");
+
+   if (ptr == 0)
+      printf("buffer 2 equals buffer 1\n");
+
+   return 0;
+}
+ 
+ 
+ 
+
+函數名: strncmp
+功  能: 串比較
+用  法: int strncmp(char *str1, char *str2, int maxlen);
+程序例:
+
+#include <string.h>
+#include <stdio.h>
+
+int  main(void)
+
+{
+   char *buf1 = "aaabbb", *buf2 = "bbbccc", *buf3 = "ccc";
+   int ptr;
+
+   ptr = strncmp(buf2,buf1,3);
+   if (ptr > 0)
+      printf("buffer 2 is greater than buffer 1\n");
+   else
+      printf("buffer 2 is less than buffer 1\n");
+
+   ptr = strncmp(buf2,buf3,3);
+   if (ptr > 0)
+      printf("buffer 2 is greater than buffer 3\n");
+   else
+      printf("buffer 2 is less than buffer 3\n");
+
+   return(0);
+}
+ 
+ 
+
+函數名: strncmpi
+功  能: 把串中的一部分與另一串中的一部分比較, 不管大小寫
+用  法: int strncmpi(char *str1, char *str2);
+程序例:
+
+#include <string.h>
+#include <stdio.h>
+
+int main(void)
+{
+   char *buf1 = "BBBccc", *buf2 = "bbbccc";
+   int ptr;
+
+   ptr = strncmpi(buf2,buf1,3);
+
+   if (ptr > 0)
+      printf("buffer 2 is greater than buffer 1\n");
+
+   if (ptr < 0)
+      printf("buffer 2 is less than buffer 1\n");
+
+   if (ptr == 0)
+      printf("buffer 2 equals buffer 1\n");
+
+   return 0;
+}
+ 
+ 
+
+函數名: strncpy
+功  能: 串拷貝
+用  法: char *strncpy(char *destin, char *source, int maxlen);
+程序例:
+
+#include <stdio.h>
+#include <string.h>
+
+int main(void)
+{
+   char string[10];
+   char *str1 = "abcdefghi";
+
+   strncpy(string, str1, 3);
+   string[3] = '\0';
+   printf("%s\n", string);
+   return 0;
+}
+ 
+ 
+
+函數名: strnicmp
+功  能: 不注重大小寫地比較兩個串
+用  法: int strnicmp(char *str1, char *str2, unsigned maxlen);
+程序例:
+
+#include <string.h>
+#include <stdio.h>
+
+int main(void)
+{
+   char *buf1 = "BBBccc", *buf2 = "bbbccc";
+   int ptr;
+
+   ptr = strnicmp(buf2, buf1, 3);
+
+   if (ptr > 0)
+      printf("buffer 2 is greater than buffer 1\n");
+
+   if (ptr < 0)
+      printf("buffer 2 is less than buffer 1\n");
+
+   if (ptr == 0)
+      printf("buffer 2 equals buffer 1\n");
+
+   return 0;
+}
+ 
+ 
+ 
+
+函數名: strnset
+功  能: 將一個串中的所有字符都設爲指定字符
+用  法: char *strnset(char *str, char ch, unsigned n);
+程序例:
+
+#include <stdio.h>
+#include <string.h>
+
+int main(void)
+{
+   char *string = "abcdefghijklmnopqrstuvwxyz";
+   char letter = 'x';
+
+   printf("string before strnset: %s\n", string);
+   strnset(string, letter, 13);
+   printf("string after  strnset: %s\n", string);
+
+   return 0;
+}
+ 
+ 
+
+函數名: strpbrk
+功  能: 在串中查找給定字符集中的字符
+用  法: char *strpbrk(char *str1, char *str2);
+程序例:
+
+#include <stdio.h>
+#include <string.h>
+
+int main(void)
+{
+   char *string1 = "abcdefghijklmnopqrstuvwxyz";
+   char *string2 = "onm";
+   char *ptr;
+
+   ptr = strpbrk(string1, string2);
+
+   if (ptr)
+      printf("strpbrk found first character: %c\n", *ptr);
+   else
+      printf("strpbrk didn't find character in set\n");
+
+   return 0;
+}
+ 
+ 
+ 
+
+函數名: strrchr
+功  能: 在串中查找指定字符的最後一個出現
+用  法: char *strrchr(char *str, char c);
+程序例:
+
+#include <string.h>
+#include <stdio.h>
+
+int main(void)
+{
+   char string[15];
+   char *ptr, c = 'r';
+
+   strcpy(string, "This is a string");
+   ptr = strrchr(string, c);
+   if (ptr)
+      printf("The character %c is at position: %d\n", c, ptr-string);
+   else
+      printf("The character was not found\n");
+   return 0;
+}
+ 
+ 
+ 
+
+函數名: strrev
+功  能: 串倒轉
+用  法: char *strrev(char *str);
+程序例:
+
+#include <string.h>
+#include <stdio.h>
+
+int main(void)
+{
+   char *forward = "string";
+
+   printf("Before strrev(): %s\n", forward);
+   strrev(forward);
+   printf("After strrev():  %s\n", forward);
+   return 0;
+}
+ 
+
+函數名: strset
+功  能: 將一個串中的所有字符都設爲指定字符
+用  法: char *strset(char *str, char c);
+程序例:
+
+#include <stdio.h>
+#include <string.h>
+
+int main(void)
+{
+   char string[10] = "123456789";
+   char symbol = 'c';
+
+   printf("Before strset(): %s\n", string);
+   strset(string, symbol);
+   printf("After strset():  %s\n", string);
+   return 0;
+}
+ 
+ 
+ 
+
+函數名: strspn
+功  能: 在串中查找指定字符集的子集的第一次出現
+用  法: int strspn(char *str1, char *str2);
+程序例:
+
+#include <stdio.h>
+#include <string.h>
+#include <alloc.h>
+
+int main(void)
+{
+   char *string1 = "1234567890";
+   char *string2 = "123DC8";
+   int length;
+
+   length = strspn(string1, string2);
+   printf("Character where strings differ is at position %d\n", length);
+   return 0;
+}
+ 
+ 
+
+函數名: strstr
+功  能: 在串中查找指定字符串的第一次出現
+用  法: char *strstr(char *str1, char *str2);
+程序例:
+
+#include <stdio.h>
+#include <string.h>
+
+int main(void)
+{
+   char *str1 = "Borland International", *str2 = "nation", *ptr;
+
+   ptr = strstr(str1, str2);
+   printf("The substring is: %s\n", ptr);
+   return 0;
+}
+ 
+ 
+
+函數名: strtod
+功  能: 將字符串轉換爲double型值
+用  法: double strtod(char *str, char **endptr);
+程序例:
+
+#include <stdio.h>
+#include <stdlib.h>
+
+int main(void)
+{
+   char input[80], *endptr;
+   double value;
+
+   printf("Enter a floating point number:");
+   gets(input);
+   value = strtod(input, &endptr);
+   printf("The string is %s the number is %lf\n", input, value);
+   return 0;
+}
+ 
+ 
+ 
+
+函數名: strtok
+功  能: 查找由在第二個串中指定的分界符分隔開的單詞
+用  法: char *strtok(char *str1, char *str2);
+程序例:
+
+#include <string.h>
+#include <stdio.h>
+
+int main(void)
+{
+   char input[16] = "abc,d";
+   char *p;
+
+   /* strtok places a NULL terminator
+   in front of the token, if found */
+   p = strtok(input, ",");
+   if (p)   printf("%s\n", p);
+
+   /* A second call to strtok using a NULL
+   as the first parameter returns a pointer
+   to the character following the token  */
+   p = strtok(NULL, ",");
+   if (p)   printf("%s\n", p);
+   return 0;
+}
+ 
+ 
+ 
+
+函數名: strtol
+功  能: 將串轉換爲長整數
+用  法: long strtol(char *str, char **endptr, int base);
+程序例:
+
+#include <stdlib.h>
+#include <stdio.h>
+
+int main(void)
+{
+   char *string = "87654321", *endptr;
+   long lnumber;
+
+   /* strtol converts string to long integer  */
+   lnumber = strtol(string, &endptr, 10);
+   printf("string = %s  long = %ld\n", string, lnumber);
+
+   return 0;
+}
+ 
+
+函數名: strupr
+功  能: 將串中的小寫字母轉換爲大寫字母
+用  法: char *strupr(char *str);
+程序例:
+
+#include <stdio.h>
+#include <string.h>
+
+int main(void)
+{
+   char *string = "abcdefghijklmnopqrstuvwxyz", *ptr;
+
+   /* converts string to upper case characters */
+   ptr = strupr(string);
+   printf("%s\n", ptr);
+   return 0;
+}
+ 
+ 
+ 
+
+函數名: swab
+功  能: 交換字節
+用  法: void swab (char *from, char *to, int nbytes);
+程序例:
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+
+char source[15] = "rFna koBlrna d";
+char target[15];
+
+int main(void)
+{
+   swab(source, target, strlen(source));
+   printf("This is target: %s\n", target);
+   return 0;
+}
