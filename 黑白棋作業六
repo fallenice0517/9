@@ -1,0 +1,335 @@
+#include <stdio.h>
+#define SIZE 8
+struct data
+{
+    int coord[64][2];
+    int amount;
+};
+
+struct best
+{
+    int coord[1][2];
+    int total;
+};
+
+struct data All_Valid_Move(int chess[SIZE][SIZE], int color)
+{
+        struct data info;
+        int count=0;
+        info.coord[0][0]=8;
+
+        for (int i=0; i<SIZE; i++)
+        {
+            for (int j=0; j<SIZE; j++)
+            {
+                if (chess[i][j]==color)
+                {
+                    int dx[]={-1, -1, -1, 0, 0, 1, 1, 1}, dy[]={-1, 0, 1, -1, 1, -1, 0, 1};
+                    int look_x=0, look_y=0;
+                    for (int x=i-1; x<=i+1; x++)
+                    {
+                        for (int y=j-1; y<=j+1; y++)
+                        {
+                            if (x==i && y==j) continue;
+                            else if (chess[x][y]!=chess[i][j] && chess[x][y]!=0)
+                            {
+                                int X=x+dx[look_x], Y=y+dy[look_y];
+                                
+                                while (X>=0 && X<SIZE && Y>=0 && Y<SIZE) 
+                                {
+                                    if (chess[X][Y]==0)
+                                    {
+                                        info.coord[count][0]=X, info.coord[count][1]=Y, count+=1;
+                                        break;
+                                    }
+                                    else if (chess[X][Y]!=chess[i][j])
+                                        X+=dx[look_x], Y+=dy[look_y];
+                                    else break;
+                                }
+                            }
+                            if (x!=i || y!=j) look_x+=1, look_y+=1;
+                        }
+                    }
+                }
+            }
+        }
+        info.amount=count;
+        if (info.coord[0][0]==8)
+            printf("not existed");
+        else
+            for (int out=0; out<info.amount; out++)
+                printf("(%d, %d)", info.coord[out][0], info.coord[out][1]);
+        printf("\n");
+        return info;
+}
+
+struct best best_move(int chess_1[SIZE][SIZE], struct data availabe_move, int color)
+{
+
+    struct best move;
+    move.total=0;
+    for (int big=0; big<availabe_move.amount; big++)
+    {
+        int chess[SIZE][SIZE];
+        for (int i=0; i<SIZE; i++)
+            for (int j=0; j<SIZE; j++)
+                chess[i][j]=chess_1[i][j];
+
+        chess[availabe_move.coord[big][0]][availabe_move.coord[big][1]]=color;
+
+        int dx[]={-1, -1, -1, 0, 0, 1, 1, 1}, dy[]={-1, 0, 1, -1, 1, -1, 0, 1};
+        int look_x=0, look_y=0;
+        int count=0;
+        int sum=0;
+        for (int i=availabe_move.coord[big][0]-1; i<=availabe_move.coord[big][0]+1; i++)
+        {
+            for (int j=availabe_move.coord[big][1]-1; j<=availabe_move.coord[big][1]+1; j++)
+            {
+                int num=1;
+                if (i==availabe_move.coord[big][0] && j==availabe_move.coord[big][1]) continue;
+
+                else if (chess[i][j]!=chess[availabe_move.coord[big][0]][availabe_move.coord[big][1]] && chess[i][j]!=0)
+                {
+                    int X=i+dx[look_x], Y=j+dy[look_y];
+                    
+                    while (X>=0 && X<SIZE && Y>=0 && Y<SIZE)
+                    {
+                        if (chess[X][Y]==chess[availabe_move.coord[big][0]][availabe_move.coord[big][1]])
+                        {
+                            for (int a=0; a<=num; a++)
+                            {
+                                chess[X][Y]=chess[availabe_move.coord[big][0]][availabe_move.coord[big][1]];
+                                X-=dx[look_x], Y-=dy[look_y];
+                            }
+                            sum+=num;
+                            break;
+                        }
+                        else if (chess[X][Y]!=0)
+                        {
+                            X+=dx[look_x], Y+=dy[look_y];
+                            num++;
+                        }
+                        
+                        else break;
+                    }
+                }
+                if (availabe_move.coord[big][0]!=i || availabe_move.coord[big][1]!=j) look_x+=1, look_y+=1;
+            }
+        }
+        printf("(%d %d) is able to eat %d PC chesses\n",availabe_move.coord[big][0],availabe_move.coord[big][1],sum);
+        if (sum>move.total)
+        {
+            move.total=sum;
+            move.coord[0][0]=availabe_move.coord[big][0];
+            move.coord[0][1]=availabe_move.coord[big][1];
+        }
+    }
+    return move;
+}
+
+int judge(struct data availabe_move, int x, int y)
+{
+    for (int i=0; i<availabe_move.amount; i++)
+        if (availabe_move.coord[i][0]==x && availabe_move.coord[i][1]==y)
+            return 1;
+    return 0;
+}
+
+int switch_color(int chess[SIZE][SIZE], int x, int y, struct data availabe_move, int color)
+{   
+    int judge_result=judge(availabe_move, x, y);
+    int sum=0;
+    
+    if (judge_result==0)
+        printf("Invalid move\n");
+    else
+    {
+        chess[x][y]=color;
+        int dx[]={-1, -1, -1, 0, 0, 1, 1, 1}, dy[]={-1, 0, 1, -1, 1, -1, 0, 1};
+        int look_x=0, look_y=0;
+        int count=0;
+        for (int i=x-1; i<=x+1; i++)
+        {
+            for (int j=y-1; j<=y+1; j++)
+            {
+                int num=1;
+                if (i==x && j==y) continue;
+
+                else if (chess[i][j]!=chess[x][y] && chess[i][j]!=0)
+                {
+                    int X=i+dx[look_x], Y=j+dy[look_y];
+                    
+                    while (X>=0 && X<SIZE && Y>=0 && Y<SIZE)
+                    {
+                        if (chess[X][Y]==chess[x][y])
+                        {
+                            for (int a=0; a<=num; a++)
+                            {
+                                chess[X][Y]=chess[x][y];
+                                X-=dx[look_x], Y-=dy[look_y];
+                            }
+                            sum+=num;
+                            break;
+                        }
+                        else if (chess[X][Y]!=0)
+                        {
+                            X+=dx[look_x], Y+=dy[look_y];
+                            num++;
+                        }
+                        
+                        else break;
+                    }
+                }
+                if (x!=i || y!=j) look_x+=1, look_y+=1;
+            }
+        }
+        printf("ate %d black chesses\n",sum);
+        for (int i=0; i<SIZE; i++)
+        {
+            for (int j=0; j<SIZE; j++)
+                printf("%d ",chess[i][j]);
+            printf("\n");
+        }
+    }
+    return sum;
+}
+
+int main()
+{
+    // =============================================== Initializing the board. ==========================================
+    
+    printf("Welcome to noob game!\n");
+    printf("Below is the initialized board\n");
+    printf("\n");
+
+    int chess[SIZE][SIZE]={
+    {0, 0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 2, 1, 0, 0, 0},
+    {0, 0, 0, 1, 2, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0, 0}
+    };
+
+    for (int i=0; i<SIZE; i++)
+    {
+        for (int j=0; j<SIZE; j++)
+            printf("%d ",chess[i][j]);
+        printf("\n");
+    }
+
+    // =============================================== Choose color. ==========================================
+
+    printf("choose the color you want (1 for black and 2 for white)\n");
+
+    int player_color;
+    while (scanf("%d",&player_color))
+    {
+        if (player_color!=1 && player_color!=2)
+            printf("please input valid color number\n");
+        else
+            break;
+    }
+
+    int PC_color;
+    if (player_color==1)
+    {
+        PC_color=2;
+        printf("Ok, so now you will be Black(1) chess, and PC will be white(2) chess.\n");
+    }
+    else
+    {
+        PC_color=1;
+        printf("Ok, so now you will be white(2) chess, and PC will be Black(1) chess.\n");
+    }
+
+    printf("\n");
+
+    // =============================================== Game starts from here. ==========================================
+
+    int round=1;
+    int player_sum=0;
+    int PC_sum=0;
+
+    while (1)
+    {
+        
+        // =============================================== Your round. ==========================================
+        
+        printf("round %d!:\n",round);
+
+        printf("It's your round!\n");
+
+        printf("All available moves for you are: ");
+        struct data availabe_move=All_Valid_Move(chess,player_color);
+        if (availabe_move.amount==0)
+        {
+            printf("looks like you are too noob and thus lost the game! Ha ha ha noob!\n");
+            break;
+        }
+        printf("\n");
+
+        printf("below shows that how many PC chesses of each move option is able to eat:\n");
+        struct best best_option=best_move(chess,availabe_move, player_color);
+
+        printf("Please choose the move that you want.\n");
+        printf("Or input with two \"-1\", if you want to quit the game.\n");
+        int x, y;
+        scanf("%d %d",&x, &y);
+        if (x==-1 && y==-1)
+            break;
+        
+        int temp_sum=switch_color(chess, x, y,availabe_move, player_color);
+        player_sum+=temp_sum;
+
+        printf("\n");
+        
+        // =============================================== PC round. ================================================
+
+        printf("Now it's PC's round!\n");
+
+        struct data PC_move=All_Valid_Move(chess,PC_color);
+        if (availabe_move.amount==0)
+        {
+            printf("PC lost the game!\n");
+            break;
+        }
+
+        best_option=best_move(chess,PC_move, PC_color);
+
+        temp_sum=switch_color(chess, best_option.coord[0][0], best_option.coord[0][1], PC_move, PC_color);
+        PC_sum+=temp_sum;
+
+        printf("This round is finished, let's move to next round!:\n");
+        round++;
+        printf("=============================================================================================================================================");
+
+        printf("\n");
+        printf("\n");
+        printf("\n");
+        printf("\n");
+    }
+
+    // =============================================== Count point. ================================================
+
+    for (int i=0; i<SIZE; i++)
+        for (int j=0; j<SIZE; j++)
+        {
+            if (chess[i][j]==player_color)
+                player_sum+=1;
+            else if (chess[i][j]==PC_color)
+                PC_sum+=1;
+            
+        }
+
+    printf("Your score is %d and PC's score is %d, therefore the result is ",player_sum, PC_sum);
+    
+    if (player_sum>PC_sum)
+        printf("you win!");
+    else if (player_sum<PC_sum)
+        printf("PC win! HA HA NOOB!");
+    else
+        printf("tie!");
+}
