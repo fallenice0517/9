@@ -1,0 +1,205 @@
+#include <stdio.h>
+#define SIZE 8
+struct data
+{
+    int coord[64][2];
+    int amount;
+};
+struct data All_Valid_Move(int chess[SIZE][SIZE], int color)
+{
+        struct data info;
+        int count=0;
+        info.coord[0][0]=8;
+
+        for (int i=0; i<SIZE; i++)
+        {
+            for (int j=0; j<SIZE; j++)
+            {
+                if (chess[i][j]==color)
+                {
+                    int dx[]={-1, -1, -1, 0, 0, 1, 1, 1}, dy[]={-1, 0, 1, -1, 1, -1, 0, 1};
+                    int look_x=0, look_y=0;
+                    for (int x=i-1; x<=i+1; x++)
+                    {
+                        for (int y=j-1; y<=j+1; y++)
+                        {
+                            if (x==i && y==j) continue;
+                            else if (chess[x][y]!=chess[i][j] && chess[x][y]!=0)
+                            {
+                                int X=x+dx[look_x], Y=y+dy[look_y];
+                                
+                                while (X>=0 && X<SIZE && Y>=0 && Y<SIZE) 
+                                {
+                                    if (chess[X][Y]==0)
+                                    {
+                                        info.coord[count][0]=X, info.coord[count][1]=Y, count+=1;
+                                        break;
+                                    }
+                                    else if (chess[X][Y]!=chess[i][j])
+                                        X+=dx[look_x], Y+=dy[look_y];
+                                    else break;
+                                }
+                            }
+                            if (x!=i || y!=j) look_x+=1, look_y+=1;
+                        }
+                    }
+                }
+            }
+        }
+        info.amount=count;
+        if (info.coord[0][0]==8) printf("not existed");
+        else
+            for (int out=0; out<info.amount; out++)
+                printf("(%d, %d)", info.coord[out][0], info.coord[out][1]);
+        printf("\n");
+        return info;
+}
+
+void best_move(int chess_1[SIZE][SIZE], struct data availabe_move)
+{
+
+    for (int big=0; big<availabe_move.amount; big++)
+    {
+        int chess[SIZE][SIZE];
+        for (int i=0; i<SIZE; i++)
+            for (int j=0; j<SIZE; j++)
+                chess[i][j]=chess_1[i][j];
+
+        chess[availabe_move.coord[big][0]][availabe_move.coord[big][1]]=2;
+
+        int dx[]={-1, -1, -1, 0, 0, 1, 1, 1}, dy[]={-1, 0, 1, -1, 1, -1, 0, 1};
+        int look_x=0, look_y=0;
+        int count=0;
+        int sum=0;
+        for (int i=availabe_move.coord[big][0]-1; i<=availabe_move.coord[big][0]+1; i++)
+        {
+            for (int j=availabe_move.coord[big][1]-1; j<=availabe_move.coord[big][1]+1; j++)
+            {
+                int num=1;
+                if (i==availabe_move.coord[big][0] && j==availabe_move.coord[big][1]) continue;
+
+                else if (chess[i][j]!=chess[availabe_move.coord[big][0]][availabe_move.coord[big][1]] && chess[i][j]!=0)
+                {
+                    int X=i+dx[look_x], Y=j+dy[look_y];
+                    
+                    while (X>=0 && X<SIZE && Y>=0 && Y<SIZE)
+                    {
+                        if (chess[X][Y]==chess[availabe_move.coord[big][0]][availabe_move.coord[big][1]])
+                        {
+                            for (int a=0; a<=num; a++)
+                            {
+                                chess[X][Y]=chess[availabe_move.coord[big][0]][availabe_move.coord[big][1]];
+                                X-=dx[look_x], Y-=dy[look_y];
+                            }
+                            sum+=num;
+                            break;
+                        }
+                        else if (chess[X][Y]!=0)
+                        {
+                            X+=dx[look_x], Y+=dy[look_y];
+                            num++;
+                        }
+                        
+                        else break;
+                    }
+                }
+                if (availabe_move.coord[big][0]!=i || availabe_move.coord[big][1]!=j) look_x+=1, look_y+=1;
+            }
+        }
+        printf("(%d %d) is able to eat %d black chesses\n",availabe_move.coord[big][0],availabe_move.coord[big][1],sum);
+    }
+}
+
+int judge(struct data availabe_move, int x, int y)
+{
+    for (int i=0; i<availabe_move.amount; i++)
+        if (availabe_move.coord[i][0]==x && availabe_move.coord[i][1]==y)
+            return 1;
+    return 0;
+}
+
+void switch_color(int chess[SIZE][SIZE], int x, int y, struct data availabe_move)
+{   
+    int judge_result=judge(availabe_move, x, y);
+    
+    if (judge_result==0)
+        printf("Invalid move\n");
+    else
+    {
+        chess[x][y]=2;
+        int dx[]={-1, -1, -1, 0, 0, 1, 1, 1}, dy[]={-1, 0, 1, -1, 1, -1, 0, 1};
+        int look_x=0, look_y=0;
+        int count=0;
+        int sum=0;
+        for (int i=x-1; i<=x+1; i++)
+        {
+            for (int j=y-1; j<=y+1; j++)
+            {
+                int num=1;
+                if (i==x && j==y) continue;
+
+                else if (chess[i][j]!=chess[x][y] && chess[i][j]!=0)
+                {
+                    int X=i+dx[look_x], Y=j+dy[look_y];
+                    
+                    while (X>=0 && X<SIZE && Y>=0 && Y<SIZE)
+                    {
+                        if (chess[X][Y]==chess[x][y])
+                        {
+                            for (int a=0; a<=num; a++)
+                            {
+                                chess[X][Y]=chess[x][y];
+                                X-=dx[look_x], Y-=dy[look_y];
+                            }
+                            sum+=num;
+                            break;
+                        }
+                        else if (chess[X][Y]!=0)
+                        {
+                            X+=dx[look_x], Y+=dy[look_y];
+                            num++;
+                        }
+                        
+                        else break;
+                    }
+                }
+                if (x!=i || y!=j) look_x+=1, look_y+=1;
+            }
+        }
+        printf("ate %d black chesses\n",sum);
+        for (int i=0; i<SIZE; i++)
+        {
+            for (int j=0; j<SIZE; j++)
+                printf("%d ",chess[i][j]);
+            printf("\n");
+        }
+    }
+}
+
+int main()
+{
+    int chess[SIZE][SIZE]={
+    {0, 0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 2, 1, 0, 0, 0},
+    {0, 0, 0, 1, 2, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0, 0}
+    };
+
+    while (1)
+    {
+        int x,y;
+        int flag=0;
+        printf("All available movements for white (2) chess are: ");
+        struct data availabe_move=All_Valid_Move(chess,2);
+        best_move(chess,availabe_move);
+        scanf("%d %d",&x, &y);
+        if (x==-1 && y==-1)
+            break;
+        switch_color(chess, x, y,availabe_move);
+        printf("Input with two \"-1\", if you want to quit the game.\n");
+    }
+}
