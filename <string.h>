@@ -657,3 +657,34 @@ int main(void)
    printf("This is target: %s\n", target);
    return 0;
 }
+
+
+
+
+
+void *memset(void *str, int c, size_t n)
+str -- 這是來填充的內存塊的指針。
+c -- 這是要設置的值。作為一個int值傳遞，但使用這個值的無符號字符型轉換函數填充的內存塊。
+n -- 這是要設置的值的字節數。
+這個函數返回一個指針，指向的內存區域str。 
+
+#include <stdio.h>
+#include <string.h>
+
+int main ()
+{
+   char str[50];
+
+   strcpy(str,"This is string.h library function");
+   puts(str);
+
+   memset(str,'$',7);
+   puts(str);
+   
+   return(0);
+}
+
+output
+This is string.h library function
+$$$$$$$ string.h library function
+
