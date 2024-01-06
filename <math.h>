@@ -1,32 +1,135 @@
-<math.h>
-int abs(int);
-功能：求整數的絕對值
-範例：
+sqrt() - Calculates the square root of a number.
+Example:
 
-double sqrt(double);
-功能：開根號
-範例：
+c
+Copy code
+#include <stdio.h>
+#include <math.h>
 
-double pow(double, double);
-功能：計算X^y
-範例：
+int main() {
+    double number = 25.0;
+    double squareRoot = sqrt(number);
+    printf("Square root of %lf = %lf\n", number, squareRoot);
+    return 0;
+}
+pow() - Computes the power of a number.
+Example:
 
-double sin(double);
-功能：sin
-範例：
+c
+Copy code
+#include <stdio.h>
+#include <math.h>
 
-double cos(double);
-功能：sin
-範例：
+int main() {
+    double base = 2.0;
+    double exponent = 3.0;
+    double result = pow(base, exponent);
+    printf("%lf raised to the power of %lf = %lf\n", base, exponent, result);
+    return 0;
+}
+fabs() - Returns the absolute value of a floating-point number.
+Example:
 
-double tan(double);
-功能：sin
-範例：
+c
+Copy code
+#include <stdio.h>
+#include <math.h>
 
-double log(double);
-功能：自然對數(log)
-範例：
+int main() {
+    double number = -10.5;
+    double absoluteValue = fabs(number);
+    printf("Absolute value of %lf = %lf\n", number, absoluteValue);
+    return 0;
+}
+sin(), cos(), tan() - Calculate trigonometric sine, cosine, and tangent respectively (input in radians).
+Example:
 
-double log10(double);
-功能：常用對數(log)
-範例：
+c
+Copy code
+#include <stdio.h>
+#include <math.h>
+
+int main() {
+    double angle = 45.0; // in degrees
+    double radian = angle * (M_PI / 180.0); // Convert degrees to radians
+    double sineValue = sin(radian);
+    double cosineValue = cos(radian);
+    double tangentValue = tan(radian);
+    
+    printf("sin(%lf) = %lf\n", angle, sineValue);
+    printf("cos(%lf) = %lf\n", angle, cosineValue);
+    printf("tan(%lf) = %lf\n", angle, tangentValue);
+    
+    return 0;
+}
+log(), log10() - Computes the natural logarithm and base-10 logarithm respectively.
+Example:
+
+c
+Copy code
+#include <stdio.h>
+#include <math.h>
+
+int main() {
+    double number = 100.0;
+    double naturalLog = log(number);
+    double logBase10 = log10(number);
+    printf("Natural logarithm of %lf = %lf\n", number, naturalLog);
+    printf("Logarithm base 10 of %lf = %lf\n", number, logBase10);
+    return 0;
+}
+ceil() - Rounds a number up to the nearest integer.
+Example:
+
+c
+Copy code
+#include <stdio.h>
+#include <math.h>
+
+int main() {
+    double number = 6.4;
+    double result = ceil(number);
+    printf("Ceiling of %lf = %lf\n", number, result);
+    return 0;
+}
+
+Trigonometric Functions:
+
+sin(x): Calculates the sine of x (in radians).
+cos(x): Calculates the cosine of x (in radians).
+tan(x): Calculates the tangent of x (in radians).
+asin(x): Calculates the arc sine (inverse sine) of x, returning the result in radians.
+acos(x): Calculates the arc cosine (inverse cosine) of x, returning the result in radians.
+atan(x): Calculates the arc tangent (inverse tangent) of x, returning the result in radians.
+atan2(y, x): Computes the arc tangent of y/x, using the signs of both arguments to determine the quadrant of the result.
+Hyperbolic Functions:
+
+sinh(x): Calculates the hyperbolic sine of x.
+cosh(x): Calculates the hyperbolic cosine of x.
+tanh(x): Calculates the hyperbolic tangent of x.
+asinh(x): Calculates the inverse hyperbolic sine of x.
+acosh(x): Calculates the inverse hyperbolic cosine of x.
+atanh(x): Calculates the inverse hyperbolic tangent of x.
+Exponential and Logarithmic Functions:
+
+exp(x): Calculates the exponential value of x (e raised to the power x).
+log(x): Calculates the natural logarithm of x (base e).
+log10(x): Calculates the logarithm of x to the base 10.
+pow(x, y): Calculates x raised to the power y.
+sqrt(x): Calculates the square root of x.
+Rounding and Remainder Functions:
+
+ceil(x): Rounds x up to the nearest integer.
+floor(x): Rounds x down to the nearest integer.
+round(x): Rounds x to the nearest integer.
+trunc(x): Rounds x towards zero to the nearest integer.
+fmod(x, y): Computes the remainder of x divided by y.
+Absolute Value Function:
+
+fabs(x): Returns the absolute value of x (for floating-point numbers).
+Other Functions:
+
+hypot(x, y): Computes the length of the hypotenuse of a right-angled triangle with sides of length x and y.
+fdim(x, y): Returns the positive difference between x and y.
+fmax(x, y): Returns the maximum of x and y.
+fmin(x, y): Returns the minimum of x and y.
