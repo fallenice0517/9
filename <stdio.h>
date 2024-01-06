@@ -1,48 +1,621 @@
-<stdio.h>
-#文件操作
-int remove(const char *filename);
-功能：deletes the file or directory referred to by its string argument.
-範例：
+clearerr()函數。
 
-int rename(const char *old, const char *new);
-功能：causes the filename referred to by old_filename to be changed to new_filename.
-範例：
+void clearerr(FILE *stream)
+參數
+stream -- 這是一個文件對象的標識流的指針。
 
-#格式化輸入輸出
-int scanf(const char * restrict format, ...);
-功能：formatted text, under the control of the format format and any additional arguments.
-範例：
+返回值
+這應該不會失敗，並冇有設置外部變量errno但如果它檢測到它的參數不是一個有效的流，它必須返回-1，並設置errno為EBADF。
 
-int sprintf(char * restrict s, const char * restrict format, ...);
-功能：把格式文字轉成字串並傳到變數中儲存
-範例：
+例子
+#include <stdio.h>
 
-int printf(const char * restrict format, ...);
-功能：輸出格式化字串
-範例：
+int main()
+{
+   FILE *fp;
+   char c;
 
-#字符輸入輸出
-int getchar(void);
-功能：輸入一個字符（unsigned char類型）
-範例：
+   fp = fopen("file.txt", "w");
 
-int putchar(int c);
-功能：used to write a character, of unsigned char type, to stdout.
-範例：
+   c = fgetc(fp);
+   if( ferror(fp) )
+   {
+      printf("Error in reading from file : file.txt
+");
+   }
+   clearerr(fp);
+   if( ferror(fp) )
+   {
+      printf("Error in reading from file : file.txt
+");
+   }
+   fclose(fp);
 
-#錯誤處理
-void clearerr(FILE *stream);
-功能：clears the end-of-file and error indicators for the given stream.
-範例：
+   return(0);
+}
+========================================================================================================================
+int fclose(FILE *stream)關閉該流。所有的緩衝區被刷新。  
 
-int feof(FILE *stream);
-功能：indicates whether the end-of-file flag is set for the given stream .
-範例：
+聲明
+以下是聲明fclose()函數。
 
-int ferror(FILE *stream);
-功能：tests for an error in reading from or writing to the given stream .
-範例：
+int fclose(FILE *stream)
+參數
+stream -- 這是一個文件對象的指針指定的數據流被關閉。
 
-void perror(const char *s);
-功能：takes a string argument (s) that is typically used to provide additional information about the error.
-範例：
+返回值
+此方法返回0，如果流成功關閉。如果失敗，返回EOF。
+
+例子
+#include <stdio.h>
+
+int main()
+{
+   FILE *fp;
+ 
+   fp = fopen("file.txt", "w");
+
+   fprintf(fp, "%s", "This is gitbook.net");
+   fclose(fp);
+   
+   return(0);
+}
+========================================================================================================================
+feof()函數的聲明。
+
+int feof(FILE *stream)
+參數
+stream -- 這是一個文件 FILE 對象的標識流的指針。
+
+返回值
+這個函數返回一個非零值時，與該流關聯的文件結束指示器設置，否則返回零。
+
+實例
+#include <stdio.h>
+
+int main ()
+{
+   FILE *fp;
+   int c;
+   int n = 0;
+  
+   fp = fopen("file.txt","r");
+   if(fp == NULL) 
+   {
+      perror("Error in opening file");
+      return(-1);
+   }
+   while(!feof(fp))
+   {
+      c = fgetc(fp);
+      printf("%c", c);
+   }
+  
+   fclose(fp);
+   
+   return(0);
+}
+========================================================================================================================
+int ferror(FILE *stream)
+參數
+stream -- 這是一個文件 FILE 對象的標識流的指針。
+
+返回值
+如果錯誤指示燈與流關聯的設置，函數返回一個非零值，否則，它返回一個零值。
+
+例子
+#include <stdio.h>
+
+int main()
+{
+   FILE *fp;
+   char c;
+
+   fp = fopen("file.txt", "w");
+
+   c = fgetc(fp);
+   if( ferror(fp) )
+   {
+      printf("Error in reading from file : file.txt
+");
+   }
+   clearerr(fp);
+   if( ferror(fp) )
+   {
+      printf("Error in reading from file : file.txt
+");
+   }
+   fclose(fp);
+
+   return(0);
+}
+========================================================================================================================
+int fflush(FILE *stream)
+參數
+stream -- 這是一個文件對象，它指定了一個緩衝的流指針。
+
+返回值
+這個函數返回零值成功。如果出現錯誤，則返回EOF並設置錯誤指示燈（即feof）。
+
+例子
+#include <stdio.h>
+
+int main()
+{
+
+   char buff[1024];
+
+   memset( buff, '\0', sizeof( buff ));
+
+   fprintf(stdout, "Going to set full buffering on
+");
+   setvbuf(stdout, buff, _IOFBF, 1024);
+
+   fprintf(stdout, "This is gitbook.net
+");
+   fprintf(stdout, "This output will go into buff
+");
+   fflush( stdout );
+
+   fprintf(stdout, "and this will appear when programm
+");
+   fprintf(stdout, "will come after sleeping 5 seconds
+");
+
+   sleep(5);
+
+   return(0);
+}
+========================================================================================================================
+int fgetpos(FILE *stream, fpos_t *pos)
+參數
+stream -- 這是一個文件對象的標識流的指針。
+
+pos -- 這就是指針一個為fpos_t的對象。
+
+返回值
+該函數成功返回零，否則在錯誤的情況下返回非零值。
+
+例子
+#include <stdio.h>
+
+int main ()
+{
+   FILE *fp;
+   fpos_t position;
+
+   fp = fopen("file.txt","w+");
+   fgetpos(fp, &position);
+   fputs("Hello, World!", fp);
+  
+   fsetpos(fp, &position);
+   fputs("This is going to override previous content", fp);
+   fclose(fp);
+   
+   return(0);
+}
+========================================================================================================================
+FILE *fopen(const char *filename, const char *mode)
+參數
+filename -- 這是C字符串，其中包含要打開的文件名。
+
+mode -- 這是C字符串，其中包含文件訪問模式。它包括：
+
+mode	描述
+"r"	打開一個文件進行讀取。該文件必須存在。
+"w"	創建一個空的書麵文件。如果已經存在具有相同名稱的文件，其內容被刪除的文件被認為是一個新的空文件。
+"a"	附加到文件中。寫入操作的數據追加在文件末尾的。該文件被創建，如果它不存在。
+"r+"	打開更新文件讀取和寫入。該文件必須存在。
+"w+"	創建一個空文件，讀取和寫入。
+"a+"	打開一個文件的​​讀取和追加。返回值
+這個函數返回一個FILE指針。否則，將返回NULL並設置全局變量errno以指示錯誤。
+
+例子
+#include <stdio.h>
+#include <stdlib.h>
+
+int main()
+{
+   FILE * fp;
+
+   fp = fopen ("file.txt", "w+");
+   fprintf(fp, "%s %s %s %d", "We", "are", "in", 2012);
+   
+   fclose(fp);
+   
+   return(0);
+}
+========================================================================================================================
+size_t fread(void *ptr, size_t size, size_t nmemb, FILE *stream)
+參數
+ptr -- 這是一個內存塊的指針* nmemb字節的最小尺寸大小。
+
+size -- 這是要讀取的大小（以字節為單位）的每一個元素。
+
+nmemb -- 這是元素的數目，每一個都與一個大小為size個字節。
+
+stream -- 這是一個文件對象的指針，指定一個輸入流。
+
+返回值
+作為為size_t對象，它是一個不可分割的數據類型，則返回成功讀取的元素的總數。如果這個數字不同於nmemb參數，無論是發生錯誤或達到文件末尾。
+
+例子
+#include <stdio.h>
+#include <string.h>
+
+int main()
+{
+   FILE *fp;
+   char c[] = "this is yiibai";
+   char buffer[20];
+
+   /* Open file for both reading and writing */
+   fp = fopen("file.txt", "w+");
+
+   /* Write data to the file */
+   fwrite(c, strlen(c) + 1, 1, fp);
+
+   /* Seek to the beginning of the file */
+   fseek(fp, SEEK_SET, 0);
+
+   /* Read and display data */
+   fread(buffer, strlen(c)+1, 1, fp);
+   printf("%s
+", buffer);
+   fclose(fp);
+   
+   return(0);
+}
+========================================================================================================================
+FILE *freopen(const char *filename, const char *mode, FILE *stream)
+參數
+filename -- 這是C字符串，其中包含要打開的文件名。
+
+mode -- 這是C字符串，其中包含文件訪問模式。它包括：
+
+mode	描述
+"r"	打開一個文件進行讀取。該文件必須存在。
+"w"	創建一個空的書麵文件。如果已經存在具有相同名稱的文件，其內容被刪除的文件被認為是一個新的空文件。
+"a"	附加到文件中。寫入操作的數據追加在文件末尾的。該文件被創建，如果它不存在。
+"r+"	打開更新文件閱讀和寫作。該文件必須存在。
+"w+"	創建一個空文件，讀取和寫入。
+"a+"	打開一個文件​​讀取和追加。
+stream -- 這是一個文件對象的指針標識重新打開流。
+
+返回值
+如果該文件被重新打開成功，則函數返回一個指針，指向一個對象識彆流，否則返回空指針。
+
+例子
+#include <stdio.h>
+
+int main ()
+{
+   FILE *fp;
+
+   printf("This text is redirected to stdout
+");
+
+   fp = freopen("file.txt", "w+", stdout);
+
+   printf("This text is redirected to file.txt
+");
+
+   fclose(fp);
+   
+   return(0);
+}
+========================================================================================================================
+int remove(const char *filename)
+參數
+filename -- 這是C包含要刪除的文件的名稱的字符串。
+
+返回值
+成功則返回0。錯誤則返回-1，設置errno。
+
+例子
+下麵的例子演示了如何使用remove()函數。
+
+#include <stdio.h>
+#include <string.h>
+
+int main ()
+{
+   int ret;
+   char filename[] = "file.txt";
+   
+   ret = remove(filename);
+
+   if(ret == 0) 
+   {
+      printf("File deleted successfully");
+   }
+   else 
+   {
+      printf("Error: unable to delete the file");
+   }
+   
+   return(0);
+}
+========================================================================================================================
+int sscanf(const char *str, const char *format, ...)
+參數
+str -- 這是C字符串函數流程作為其源中檢索數據。
+
+format --這是C字符串，其中包含一個或多個以下項目：空白字符，非空白字符和格式說明符
+
+格式規範遵循這個原型: [=%[*][width][modifiers]type=]
+
+參數	描述
+*	This is an optional starting asterisk indicates that the data is to be read from the stream but ignored, i.e. it is not stored in the corresponding argument.
+width	This specifies the maximum number of characters to be read in the current reading operation
+modifiers	Specifies a size different from int (in the case of d, i and n), unsigned int (in the case of o, u and x) or float (in the case of e, f and g) for the data yiibaied by the corresponding additional argument: h : short int (for d, i and n), or unsigned short int (for o, u and x) l : long int (for d, i and n), or unsigned long int (for o, u and x), or double (for e, f and g) L : long double (for e, f and g)
+type	A character specifying the type of data to be read and how it is expected to be read. See next table.
+fscanf類型說明：
+
+type	合格輸入	參數類型
+c	Single character: Reads the next character. If a width different from 1 is specified, the function reads width characters and stores them in the successive locations of the array passed as argument. No null character is appended at the end.	char *
+d	Decimal integer: Number optionally preceeded with a + or - sign	int *
+e,E,f,g,G	Floating yiibai: Decimal number containing a decimal yiibai, optionally preceeded by a + or - sign and optionally folowed by the e or E character and a decimal number. Two examples of valid entries are -732.103 and 7.12e4	float *
+o	OctalInteger:	int *
+s	String of characters. This will read subsequent characters until a whitespace is found (whitespace characters are considered to be blank, newline and tab).	char *
+u	Unsigned decimal integer.	unsigned int *
+x,X	Hexadecimal Integer	int *
+other arguments --  預計此功能作為額外的參數的指針指向對象的類型由它們相應的％標記指定的格式字符串內，以相同的順序，每一個序列。
+
+對於每一個檢索數據的格式字符串格式說明，一個額外的參數應符合規定。如果要存儲一個你應該先於它的標識符引用操作的常規變量上一個sscanf的操作結果，即一個符號符號（＆），像：int n; sscanf (str,"%d",&n);
+
+返回值
+如果成功，函數返回充滿變量的數量。在故障之前可以成功地讀取任何數據輸入的情況下，返回EOF。
+
+例子
+下麵的例子演示了如何使用 sscanf() 函數。
+
+#include <stdio.h>
+#include <stdlib.h>
+
+int main()
+{
+   int day, year;
+   char weekday[20], month[20], dtm[100];
+
+   strcpy( dtm, "Saturday March 25 1989" );
+   sscanf( dtm, "%s %s %d  %d", weekday, month, &day, &year );
+
+   printf("%s %d, %d = %s
+", month, day, year, weekday );
+    
+   return(0);
+}
+========================================================================================================================
+int sscanf(const char *str, const char *format, ...)
+參數
+str -- 這是C字符串函數流程作為其源中檢索數據。
+
+format --這是C字符串，其中包含一個或多個以下項目：空白字符，非空白字符和格式說明符
+
+格式規範遵循這個原型: [=%[*][width][modifiers]type=]
+參數	描述
+*	This is an optional starting asterisk indicates that the data is to be read from the stream but ignored, i.e. it is not stored in the corresponding argument.
+width	This specifies the maximum number of characters to be read in the current reading operation
+modifiers	Specifies a size different from int (in the case of d, i and n), unsigned int (in the case of o, u and x) or float (in the case of e, f and g) for the data yiibaied by the corresponding additional argument: h : short int (for d, i and n), or unsigned short int (for o, u and x) l : long int (for d, i and n), or unsigned long int (for o, u and x), or double (for e, f and g) L : long double (for e, f and g)
+type	A character specifying the type of data to be read and how it is expected to be read. See next table.
+fscanf類型說明：
+
+type	合格輸入	參數類型
+c	Single character: Reads the next character. If a width different from 1 is specified, the function reads width characters and stores them in the successive locations of the array passed as argument. No null character is appended at the end.	char *
+d	Decimal integer: Number optionally preceeded with a + or - sign	int *
+e,E,f,g,G	Floating yiibai: Decimal number containing a decimal yiibai, optionally preceeded by a + or - sign and optionally folowed by the e or E character and a decimal number. Two examples of valid entries are -732.103 and 7.12e4	float *
+o	OctalInteger:	int *
+s	String of characters. This will read subsequent characters until a whitespace is found (whitespace characters are considered to be blank, newline and tab).	char *
+u	Unsigned decimal integer.	unsigned int *
+x,X	Hexadecimal Integer	int *
+other arguments --  預計此功能作為額外的參數的指針指向對象的類型由它們相應的％標記指定的格式字符串內，以相同的順序，每一個序列。
+
+對於每一個檢索數據的格式字符串格式說明，一個額外的參數應符合規定。如果要存儲一個你應該先於它的標識符引用操作的常規變量上一個sscanf的操作結果，即一個符號符號（＆），像：int n; sscanf (str,"%d",&n);
+
+返回值
+如果成功，函數返回充滿變量的數量。在故障之前可以成功地讀取任何數據輸入的情況下，返回EOF。
+
+例子
+下麵的例子演示了如何使用 sscanf() 函數。
+
+#include <stdio.h>
+#include <stdlib.h>
+
+int main()
+{
+   int day, year;
+   char weekday[20], month[20], dtm[100];
+
+   strcpy( dtm, "Saturday March 25 1989" );
+   sscanf( dtm, "%s %s %d  %d", weekday, month, &day, &year );
+
+   printf("%s %d, %d = %s
+", month, day, year, weekday );
+    
+   return(0);
+}
+========================================================================================================================
+int fprintf(FILE *stream, const char *format, ...)
+參數
+stream -- 這是一個文件對象的標識流的指針。
+
+format - 這是C字符串，其中包含的文字寫入流。它可以包含嵌入的格式在隨後的附加參數指定的值所取代的標簽和格式化所要求。格式標簽的原型是 %[flags][width][.precision][length]specifier, 如下列表所示：
+
+指示符	輸出
+c	Character.
+d or i	Signed decimal integer
+e	Scientific notation (mantissa/exponent) using e character
+E	Scientific notation (mantissa/exponent) using E character
+f	Decimal floating yiibai
+g	Use the shorter of %e or %f.
+G	Use the shorter of %E or %f
+o	Signed octal
+s	String of characters
+u	Unsigned decimal integer
+x	Unsigned hexadecimal integer
+X	Unsigned hexadecimal integer (capital letters)
+p	Yiibaier address
+n	Nothing printed.
+%	Character.
+標識	描述
+-	Left-justify within the given field width; Right justification is the default (see width sub-specifier).
++	Forces to preceed the result with a plus or minus sign (+ or -) even for positive numbers. By default, only negative numbers are preceded with a - sign..
+(space)	If no sign is going to be written, a blank space is inserted before the value.
+#	Used with o, x or X specifiers the value is preceeded with 0, 0x or 0X respectively for values different than zero. Used with e, E and f, it forces the written output to contain a decimal yiibai even if no digits would follow. By default, if no digits follow, no decimal yiibai is written. Used with g or G the result is the same as with e or E but trailing zeros are not removed.
+0	Left-pads the number with zeroes (0) instead of spaces, where padding is specified (see width sub-specifier).
+width	描述
+(number)	Minimum number of characters to be printed. If the value to be printed is shorter than this number, the result is padded with blank spaces. The value is not truncated even if the result is larger.
+*	The width is not specified in the format string, but as an additional integer value argument preceding the argument that has to be formatted.
+.precision	描述
+.number	For integer specifiers (d, i, o, u, x, X): precision specifies the minimum number of digits to be written. If the value to be written is shorter than this number, the result is padded with leading zeros. The value is not truncated even if the result is longer. A precision of 0 means that no character is written for the value 0. For e, E and f specifiers: this is the number of digits to be printed after de decimal yiibai. For g and G specifiers: This is the maximum number of significant digits to be printed. For s: this is the maximum number of characters to be printed. By default all characters are printed until the ending null character is encountered. For c type: it has no effect. When no precision is specified, the default is 1. If the period is specified without an explicit value for precision, 0 is assumed.
+.*	The precision is not specified in the format string, but as an additional integer value argument preceding the argument that has to be formatted.
+length	描述
+h	The argument is interpreted as a short int or unsigned short int (only applies to integer specifiers: i, d, o, u, x and X).
+l	The argument is interpreted as a long int or unsigned long int for integer specifiers (i, d, o, u, x and X), and as a wide character or wide character string for specifiers c and s.
+L	The argument is interpreted as a long double (only applies to floating yiibai specifiers: e, E, f, g and G).
+additional arguments -- 根據格式字符串，函數可能會想到一係列的額外的參數，每個包含一個值，而不是插入的格式參數中指定的標記每個％，如果有的話。應該有相同數量的％預期值的標簽的數量的這些參數。
+
+返回值
+如果成功，返回寫入的字符的總數，否則則返回一個負數。
+
+例子
+下麵的例子顯示fprintf() 函數功能的用法。
+
+#include <stdio.h>
+#include <stdlib.h>
+
+int main()
+{
+   FILE * fp;
+
+   fp = fopen ("file.txt", "w+");
+   fprintf(fp, "%s %s %s %d", "We", "are", "in", 2012);
+   
+   fclose(fp);
+   
+   return(0);
+}
+========================================================================================================================
+int fgetc(FILE *stream)
+參數
+stream -- 這是一個文件對象的指針，標識要執行的操作流。
+
+返回值
+這個函數返回讀取的字符為unsigned char轉換為int或EOF文件結束或錯誤。
+
+例子
+下麵的例子演示了如何使用fgetc() 函數功能。
+
+#include <stdio.h>
+
+int main ()
+{
+   FILE *fp;
+   int c;
+   int n = 0;
+  
+   fp = fopen("file.txt","r");
+   if(fp == NULL) 
+   {
+      perror("Error in opening file");
+      return(-1);
+   }
+   do
+   {
+      c = fgetc(fp);
+      printf("%c", c);
+   }while(c != EOF);
+  
+   fclose(fp);
+   
+   return(0);
+}
+========================================================================================================================
+char *fgets(char *str, int n, FILE *stream)
+參數
+str -- 這是字符串讀取存儲的字符數組的指針。
+
+n -- 這是最大的被讀取的字符數（包括最後的空字符）。通常情況下，通過使用str是數組的長度。 
+
+stream -- 這是一個文件對象標識流中讀取字符的指針。
+
+返回值
+成功，該函數返回的str參數相同。如果遇到任何字符被讀取完的文件，str的內容保持不變，並返回一個空指針。
+ 
+如果發生錯誤，則返回空指針。
+例子
+下麵的例子顯示的使用fgets() 函數。
+
+#include <stdio.h>
+
+int main()
+{
+   FILE *fp;
+   char str[60];
+
+   /* opening file for reading */
+   fp = fopen("file.txt" , "r");
+   if(fp == NULL) {
+      perror("Error opening file");
+      return(-1);
+   }
+   if( fgets (str, 60, fp)!=NULL ) {
+      /* writing content to stdout */
+      puts(str);
+   }
+   fclose(fp);
+   
+   return(0);
+}
+========================================================================================================================
+int putchar(int char)
+參數
+char -- 這是要寫入的字符。這是通過作為整型轉換。
+
+返回值
+這個函數返回寫入的字符為unsigned char轉換為int或EOF錯誤。
+
+例子
+下麵的例子顯示 putchar() 函數的用法。
+
+#include <stdio.h>
+
+int main ()
+{
+   char ch;
+
+   for(ch = 'A' ; ch <= 'Z' ; ch++) {
+      putchar(ch);
+   }
+   
+   return(0);
+}
+========================================================================================================================
+int puts(const char *str)
+參數
+str -- 這是C字符串的寫入。
+
+返回值
+如果成功，返回非負值。錯誤則函數返回EOF。
+
+例子
+下麵的例子顯示使用puts()  函數。
+
+#include <stdio.h>
+#include <string.h>
+
+int main()
+{
+   char str1[15];
+   char str2[15];
+
+   strcpy(str1, "yiibai");
+   strcpy(str2, "compileonline");
+
+   puts(str1);
+   puts(str2);
+   
+   return(0);
+}
+========================================================================================================================
