@@ -1,4 +1,126 @@
-<stdlib.h>
-atof
-功能：把string轉換為double
-範例：
+Memory Allocation:
+
+malloc(size): Allocates a block of memory of the specified size in bytes.
+calloc(num, size): Allocates an array of num elements, each of size bytes, and initializes them to zero.
+realloc(ptr, newSize): Changes the size of the previously allocated memory block pointed to by ptr.
+free(ptr): Deallocates the memory block previously allocated by malloc, calloc, or realloc.
+Example of malloc:
+
+c
+Copy code
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+    int *ptr;
+    int n = 5;
+    
+    ptr = (int *)malloc(n * sizeof(int)); // Allocating memory for an array of 5 integers
+    
+    if (ptr == NULL) {
+        printf("Memory allocation failed.\n");
+        return 1;
+    }
+    
+    // Use the allocated memory...
+    
+    free(ptr); // Deallocate the memory
+    return 0;
+}
+Random Number Generation:
+
+rand(): Generates a pseudo-random integer between 0 and RAND_MAX.
+srand(seed): Seeds the random number generator with a specific seed value.
+Example of rand and srand:
+
+c
+Copy code
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+int main() {
+    int i;
+    srand(time(NULL)); // Seed the random number generator with current time
+   
+    for (i = 0; i < 5; i++) {
+        printf("%d\n", rand()); // Generate and print random numbers
+    }
+    
+    return 0;
+}
+String to Number Conversion:
+
+atoi(str): Converts a string str to an integer.
+atof(str): Converts a string str to a floating-point number.
+Example of atoi:
+
+c
+Copy code
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+    char numStr[] = "12345";
+    int number = atoi(numStr); // Convert string to integer
+    printf("The converted number is: %d\n", number);
+    return 0;
+}
+Exit Function:
+
+exit(status): Terminate the program with a specific status code.
+Example of exit:
+
+c
+Copy code
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+    printf("Program is about to exit.\n");
+    exit(0); // Terminate the program
+    printf("This line won't be executed.\n");
+    return 0;
+}
+
+
+Memory Allocation:
+
+malloc(size): Allocates a block of memory of the specified size in bytes.
+calloc(num, size): Allocates an array of num elements, each of size bytes, and initializes them to zero.
+realloc(ptr, newSize): Changes the size of the previously allocated memory block pointed to by ptr.
+free(ptr): Deallocates the memory block previously allocated by malloc, calloc, or realloc.
+Random Number Generation:
+
+rand(): Generates a pseudo-random integer between 0 and RAND_MAX.
+srand(seed): Seeds the random number generator with a specific seed value.
+String to Number Conversion:
+
+atoi(str): Converts a string str to an integer.
+atol(str): Converts a string str to a long integer.
+atoll(str): Converts a string str to a long long integer.
+atof(str): Converts a string str to a floating-point number.
+Number to String Conversion:
+
+itoa(val, str, base): Converts an integer val to a string str using the specified base.
+ltoa(val, str, base): Converts a long integer val to a string str using the specified base.
+lltoa(val, str, base): Converts a long long integer val to a string str using the specified base.
+ftoa(val, str): Converts a floating-point number val to a string str.
+Pseudo-Random Number Functions:
+
+rand() : Generates a pseudo-random integer between 0 and RAND_MAX.
+srand(seed): Seeds the random number generator.
+Environment Functions:
+
+system(command): Executes the command specified by the string command.
+getenv(name): Retrieves the value of the environment variable specified by name.
+Exit Function:
+
+exit(status): Terminates the program with a specific status code.
+Other Utility Functions:
+
+abs(n): Returns the absolute value of an integer.
+labs(n): Returns the absolute value of a long integer.
+llabs(n): Returns the absolute value of a long long integer.
+qsort(base, count, size, compare): Sorts an array.
+bsearch(key, base, count, size, compare): Searches for an element in a sorted array.
