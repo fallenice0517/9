@@ -1,69 +1,75 @@
 #include <stdio.h>
-#include <stdlib.h>
+
 #define MAX_SIZE 100
-typedef struct
+
+struct Point
 {
     int x, y;
-} Point;
-typedef struct
+};
+
+struct Stack
 {
-    Point items[MAX_SIZE];
+    struct Point items[MAX_SIZE];
     int top;
-} Stack;
-void initStack(Stack *s)
+};
+
+void push(struct Stack *s, struct Point coordinate)
 {
-    s->top=-1;
+    s->items[++s->top]=coordinate;
 }
-int isEmpty(Stack *s)
-{
-    return s->top==-1;
-}
-void push(Stack *s, Point p)
-{
-    s->items[++s->top]=p;
-}
-Point pop(Stack *s)
+
+struct Point pop(struct Stack *s)
 {
     return s->items[s->top--];
 }
-int isValid(int x, int y, int mazeSize)
+
+int empty(struct Stack *s)
 {
-    return x>=0 && x<mazeSize && y>=0 && y<mazeSize;
+    return s->top==-1;
 }
-int canReachEnd(int maze[MAX_SIZE][MAX_SIZE], int mazeSize)
+
+int valid(int x, int y, int size, int maze[size][size], int visited[MAX_SIZE][MAX_SIZE])
+{
+    return x<size && x>=0 && y<size&& y>=0  && maze[x][y]==0 && !visited[x][y];
+}
+
+int play(int size, int maze[size][size])
 {
     int visited[MAX_SIZE][MAX_SIZE]={{0}};
-    int directions[4][2] = {{-1, 0}, {0, -1}, {1, 0}, {0, 1}};
-    Stack stack;
-    initStack(&stack);
-    Point start={0, 0}, end={mazeSize-1, mazeSize-1};
+    struct Stack stack;
+    stack.top=-1;
+    struct Point start={0,0}, end={size-1, size-1};
     push(&stack, start);
-    while (!isEmpty(&stack))
+    int directions[4][2]={{-1,0},{0,-1},{0,1},{1,0}};
+    while (!empty(&stack))
     {
-        Point current=pop(&stack);
+        struct Point current=pop(&stack);
         if (current.x==end.x && current.y==end.y)
             return 1;
         visited[current.x][current.y]=1;
         for (int i=0; i<4; i++)
         {
-            int newX=current.x+directions[i][0], newY=current.y+directions[i][1];
-            if (isValid(newX, newY, mazeSize) && maze[newX][newY]==0 && !visited[newX][newY])
+            struct Point next;
+            next.x=current.x+directions[i][0], next.y=current.y+directions[i][1];
+            if (valid(next.x, next.y, size, maze, visited))
             {
-                Point next={newX, newY};
                 push(&stack, next);
             }
         }
     }
     return 0;
 }
+
 int main()
 {
-    int mazeSize, maze[MAX_SIZE][MAX_SIZE];
-    scanf("%d", &mazeSize);
-    for (int i = 0; i < mazeSize; ++i)
-        for (int j = 0; j < mazeSize; ++j)
-            scanf("%d", &maze[i][j]);
-    if (canReachEnd(maze, mazeSize))
+    int size;
+    scanf("%d",&size);
+    int maze[size][size];
+    for (int i=0; i<size; i++)
+        for (int j=0; j<size; j++)
+            scanf("%d",&maze[i][j]);
+
+    if (play(size,maze))
         printf("Yes\n");
     else
         printf("No\n");
